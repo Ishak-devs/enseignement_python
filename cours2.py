@@ -17,16 +17,3 @@ class CandidatSenior(Candidat):
 
 mon_candidat_senior = CandidatSenior("20", "abdel", "developpeur python", "paris")
 print (f"{mon_candidat_senior.nom} possède {mon_candidat_senior.annee_experiences} ans d'experiences")
-
-from fastapi import FastAPI
-
-app = FastAPI()
-
-@app.get("/candidats")
-
-def ma_fonction():
-
-    ma_liste = [{"nom": "abdel", "metier": "developpeur"},
-                {"nom": "eloise", "metier": "ingenieur"}
-                ]
-    return ma_liste
