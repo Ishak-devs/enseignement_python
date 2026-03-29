@@ -21,3 +21,17 @@ def connexion_db():
     finally:
         if conn:
             conn.close()
+
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/candidats")
+
+def ma_route():
+
+    resultat = connexion_db()
+
+    return resultat
+
