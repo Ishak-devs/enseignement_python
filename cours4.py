@@ -1,20 +1,38 @@
 import psycopg2
 from fastapi import HTTPException
+import os
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-def connexion_db():
+load_dotenv(".env")
+
+class Candidat(BaseModel):
+    nom: str
+    metier: str
+    ville: str
+
+def connexion_db(candidat: Candidat):
     conn = None
+    user = os.getenv("USER")
+    host = os.getenv("HOST")
+    password_db = os.getenv("DB_PASSWORD")
+    db_name = os.getenv("DB_NAME")
 
     try:
 
-        conn = psycopg2.connect(host="ishak", user="ishakuser", password="ishak2301", dbname="ma_db")
+        conn = psycopg2.connect(host=host, user=user, password=password_db, dbname=db_name)
 
         cursor = conn.cursor()
 
-        query_ = "SELECT * FROM candidats"
+        # query_ = "SELECT * FROM candidats"
+        sueryinsert = "INSERT INTO candidats (nom, metier, ville) VALUES (%s, %s, %s)"
 
-        cursor.execute(query_)
-        resultat = cursor.fetchall()
-        return resultat
+        cursor.execute(sueryinsert, (candidat.nom, candidat.metier, candidat.ville))
+        conn.commit()
+        return {"Message": "Candidat ajouté"}
+        # resultat = cursor.fetchall()
+        # return resultat
     except Exception:
         raise HTTPException(status_code=500)
 
@@ -22,16 +40,13 @@ def connexion_db():
         if conn:
             conn.close()
 
-
-from fastapi import FastAPI
-
 app = FastAPI()
 
-@app.get("/candidats")
+@app.post("/candidats")
 
-def ma_route():
+def ma_route(candidat: Candidat):
 
-    resultat = connexion_db()
+    resultat = connexion_db(candidat)
 
     return resultat
 
