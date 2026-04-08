@@ -44,9 +44,9 @@ app = FastAPI()
 
 @app.post("/candidats")
 
-def ma_route(candidat: Candidat):
+async def ma_route(candidat: Candidat):
 
-    resultat = connexion_db(candidat)
+    resultat = await connexion_db(candidat)
 
     return resultat
 
