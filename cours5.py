@@ -8,5 +8,5 @@ if __name__ == '__main__':
     file = Queue()
     p = Process(target=envoyer_donnes, args=(file,))
     p.start()
-    print(file.get())
+    print(f"The result is {file.get()}")
     p.join()
